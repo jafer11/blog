@@ -10,11 +10,39 @@ from blog_token.views import make_token
 
 # Create your views here.
 
-def users(request):
+def users(request, username=None):
     if request.method == 'GET':
         # 获取用户数据
-        pass
-        return JsonResponse({'code': 200})
+        if username:
+            # 拿指定用户的数据
+            try:
+                user = UserProfile.objects.get(username=username)
+            except Exception as e:
+                user = None
+            if not user:
+                result = {'code': 208, 'error': 'Without user'}
+                return JsonResponse(result)
+            # 拿指定用户的指定数据
+            if request.GET.keys():
+                # 查询指定字段
+                data = {}
+                for k in request.GET.keys():
+                    if hasattr(user, k):
+                        val = getattr(user, k)
+                        if k == 'avatar':
+                            data[k] = str(val)
+                        else:
+                            data[k] = val
+                result = {'code': 200, 'username': username, 'data': data}
+                return JsonResponse(result)
+            else:
+                # 全量查询[password email不给]
+                result = {'code': 200, 'username': username,
+                          'data': {'info': user.info, 'sign': user.sign, 'avatar': str(user.avatar),
+                                   'nickname': user.nickname}}
+                return JsonResponse(result)
+        else:
+            return JsonResponse({'code': 200, 'error': 'GET'})
     elif request.method == 'POST':
         # request.POST 只能拿表单提交的数据
         dict = json.loads(request.body.decode())

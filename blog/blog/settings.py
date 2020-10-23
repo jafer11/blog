@@ -144,3 +144,5 @@ CORS_ALLOW_HEADERS = (
     'x-requested-with',
 )
 # CORS_PREFLIGHT_MAX_AGE = 86400
+# 取消浏览器url自动加“/”
+APPEND_SLASH = False

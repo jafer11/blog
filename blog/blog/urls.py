@@ -17,9 +17,10 @@ from django.conf.urls import url
 from django.contrib import admin
 from django.conf.urls import include
 from . import views
+
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^test/$', views.test_api),
-    url(r'^v1/users/',include('user.urls')),
-    url(r'^v1/tokens/',include('blog_token.urls'))
+    url(r'^v1/users', include('user.urls')),
+    url(r'^v1/tokens', include('blog_token.urls'))
 ]
