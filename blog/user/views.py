@@ -119,4 +119,31 @@ def users(request, username=None):
 
     else:
         raise
-    return JsonResponse({'code': 200})
+    # return JsonResponse({'code': 200})
+
+
+@login_check('POST')
+def user_avatar(request, username):
+    """
+    上传用户头像
+    :param request:
+    :param usernmae:
+    :return:
+    """
+    if request.method != 'POST':
+        result = {'code': 212, 'error': 'Need a POST method'}
+        return JsonResponse(result)
+    avatar = request.FILES.get('avatar')
+    print(type(avatar))
+    print(avatar)
+    if not avatar:
+        result = {'code': 213, 'error': 'Need avatar'}
+        return JsonResponse(result)
+    # todo 判断url中的username 是否跟 token 中的username一致，若不一致，则返回error
+    # if username != request.user.username:
+    #     result = {'code': 214, 'error': 'Username error'}
+    #     return JsonResponse(result)
+    request.user.avatar = avatar
+    request.user.save()
+    result = {'code': 200, 'username': request.user.username}
+    return JsonResponse(result)

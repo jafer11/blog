@@ -146,3 +146,7 @@ CORS_ALLOW_HEADERS = (
 # CORS_PREFLIGHT_MAX_AGE = 86400
 # 取消浏览器url自动加“/”
 APPEND_SLASH = False
+
+# 媒体资源存放的服务器目录
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')

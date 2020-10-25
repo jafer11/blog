@@ -6,4 +6,5 @@ urlpatterns = [
     url(r'^$', views.users),
     #APPEND_SLASH 自动不全url后面的斜线
     url(r'^/(?P<username>[\w]{1,11})$', views.users),
+    url(r'^/(?P<username>[\w]{1,11}/avatar)$', views.user_avatar),
 ]
