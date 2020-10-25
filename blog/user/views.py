@@ -6,10 +6,11 @@ import hashlib
 import random
 import time
 from blog_token.views import make_token
+from tools.login_check import login_check
 
 
 # Create your views here.
-
+@login_check('PUT')
 def users(request, username=None):
     if request.method == 'GET':
         # 获取用户数据
@@ -94,7 +95,28 @@ def users(request, username=None):
 
     elif request.method == 'PUT':
         # 更新数据
-        pass
+        # 此头可获取前端传来的token，META可拿去http协议原生头，META也是类字典
+        # 对象，可使用字典相关方法
+        # 特别注意 http头有可能被django重命名，建议百度
+        user = request.user
+        json_str = request.body.decode()
+        if not json_str:
+            result = {'code': 209, 'error': 'Please give me json'}
+            return JsonResponse(result)
+        json_obj = json.loads(json_str)
+        if 'sign' not in json_obj:
+            result = {'code': 210, 'error': 'Without sign'}
+            return JsonResponse(result)
+        if 'info' not in json_obj:
+            result = {'code': 211, 'error': 'Without info'}
+        sign = json_obj.get('sign')
+        info = json_obj.get('info')
+        request.user.sign = sign
+        request.user.info = info
+        request.user.save()
+        result = {'code': 200, 'username': request.user.username}
+        return JsonResponse(result)
+
     else:
         raise
     return JsonResponse({'code': 200})
