@@ -43,8 +43,23 @@ def login_check(*methods):
 
     return _login_check
 
-# def _login_check(func):
-#     def wrapper():
-#         return func()
-#
-#     return wrapper
+
+def get_user_by_request(request):
+    """
+    通过request 尝试获取user
+    :param request:
+    :return: UserProfile obj or None
+    """
+    token = request.META.get('HTTP_AUTHORIZATION')
+    if not token:
+        return None
+    try:
+        res = jwt.decode(token, KEY)
+    except:
+        return None
+    username = res['username']
+    try:
+        user = UserProfile.objects.get(username=username)
+    except:
+        return None
+    return user
