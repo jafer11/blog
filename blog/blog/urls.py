@@ -26,6 +26,7 @@ urlpatterns = [
     url(r'^v1/users', include('user.urls')),
     url(r'^v1/tokens', include('blog_token.urls')),
     url(r'^v1/topics', include('topic.urls')),
+    url(r'^v1/messages', include('message.urls')),
 ]
 # 生产媒体资源路由
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

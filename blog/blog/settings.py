@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'user',
     'blog_token',
     'topic',
+    'message'
 ]
 
 MIDDLEWARE = [
